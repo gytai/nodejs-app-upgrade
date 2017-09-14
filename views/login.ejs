@@ -40,13 +40,12 @@
 <script src="js/TweenLite.min.js"></script>
 <script src="js/EasePack.min.js"></script>
 <script src="js/rAF.js"></script>
-<script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/login.js"></script>
 <script src="layui/layui.js"></script>
 <script>
-    layui.define(['layer'], function(exports){
-        var layer = layui.layer
-
+    layui.define(['layer','jquery'], function(exports){
+        var layer = layui.layer;
+        var $ = layui.jquery;
         $('.act-but').click(function () {
             var username = $('#username').val().trim();
             var password = $('#password').val().trim();

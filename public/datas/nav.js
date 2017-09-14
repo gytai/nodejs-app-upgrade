@@ -6,7 +6,7 @@ var navs = [
 		"children": [{
 			"title": "项目管理",
 			"icon": "&#xe641;",
-			"href": "/"
+			"href": "/project"
 		}]
 	},
     {
@@ -16,11 +16,11 @@ var navs = [
         "children": [{
             "title": "用户管理",
             "icon": "&#xe63c;",
-            "href": "button.html"
+            "href": "/users"
         },{
             "title": "修改密码",
             "icon": "&#xe609;",
-            "href": "button.html"
+            "href": "/pswset"
         }]
     }
 ];

@@ -11,6 +11,9 @@ router.get('/', function(req, res, next) {
   }
 });
 
+router.get('/welcome', function(req, res, next) {
+    res.render('welcome');
+});
 
 router.get('/project', function(req, res, next) {
     res.render('project');
