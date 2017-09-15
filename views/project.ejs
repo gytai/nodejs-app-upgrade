@@ -26,7 +26,10 @@
                     <th style="width: 30px;">序号</th>
                     <th>项目名称</th>
                     <th>版本号</th>
-                    <th>下载路径</th>
+                    <th>文件下载路径</th>
+                    <th>文件原名称</th>
+                    <th>文件大小</th>
+                    <th>文件MD5值</th>
                     <th>是否强制更新</th>
                     <th>更新时间</th>
                     <th>操作</th>
@@ -48,7 +51,7 @@
         <legend>项目添加</legend>
     </fieldset>
 
-    <form class="layui-form" action="">
+    <form class="layui-form" action="/project/add" method="post">
         <div class="layui-form-item">
             <label class="layui-form-label">项目名称</label>
             <div class="layui-input-block" style="width: 480px;">
@@ -67,8 +70,11 @@
             <div class="layui-inline" style="width: 600px;">
                 <label class="layui-form-label">文件上传</label>
                 <div class="layui-input-inline" style="width: 480px;">
-                    <input id="download_path" type="text" name="download_path" lay-filter="download_path" lay-verify="required" autocomplete="off" class="layui-input">
+                    <input type="text" name="download_path" id="download_path" lay-filter="download_path" lay-verify="required" autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
+                <input type="hidden" name="file_name" id="file_name" class="layui-input">
+                <input type="hidden" name="file_size" id="file_size" class="layui-input">
+                <input type="hidden" name="file_md5" id="file_md5" class="layui-input">
             </div>
             <div class="layui-inline">
                 <button type="button" class="layui-btn" id="upload_file">上传图片</button>
@@ -84,7 +90,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                <button class="layui-btn" lay-submit="" lay-filter="btnSubmit">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
@@ -125,10 +131,14 @@
         });
 
         //监听提交
-        form.on('submit(demo1)', function(data){
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            })
+        form.on('submit(btnSubmit)', function(data){
+            $.post('/project/add',data.field,function (res) {
+                if(res.code == 200){
+                    layer.msg('添加成功');
+                }else{
+                    layer.msg('添加失败');
+                }
+            });
             return false;
         });
 
@@ -136,12 +146,12 @@
         upload.render({
             elem: '#upload_file'
             ,url: '/upload/'
-            ,accept: 'file' //普通文件
+            ,accept: 'file'
             ,done: function(res){
                 $("#download_path").val(res.data.file_path);
-                $("#download_path").attr('file_md5',res.data.file_md5);
-                $("#download_path").attr('file_size',res.data.file_size);
-                $("#download_path").attr('file_name',res.data.file_name);
+                $("#file_md5").val(res.data.file_md5);
+                $("#file_size").val(res.data.file_size);
+                $("#file_name").val(res.data.file_name);
                 layer.msg('上传成功');
             }
             ,error: function(){
