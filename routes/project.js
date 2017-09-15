@@ -25,6 +25,10 @@ router.get('/query', function(req, res, next) {
 });
 
 router.post('/add', function(req, res, next) {
+    if(!req.session.user){
+        return res.send({code:400,msg:'未登录'});
+    }
+
     var name = req.body.name ;
     var version = req.body.version;
     var is_force = req.body.is_force || 0;
@@ -33,12 +37,13 @@ router.post('/add', function(req, res, next) {
     var file_name = req.body.file_name ;
     var file_size = req.body.file_size ;
     var file_md5 = req.body.file_md5 ;
+    var remark = req.body.remark ;
 
-    if(!name || !version || !download_path){
+    if(!name || !version || !download_path || !remark){
         return res.send({code:400,msg:'参数未传'});
     }
 
-    project_model.add(name,version,download_path,is_force,option_people,file_md5,file_size,file_name,function (err,data) {
+    project_model.add(name,version,download_path,is_force,option_people,file_md5,file_size,file_name,remark,function (err,data) {
         if(err){
             console.error(err);
             return res.send({code:400,msg:err.toLocaleString()});
@@ -66,7 +71,9 @@ router.post('/update', function(req, res, next) {
     if(!id){
         return res.send({code:400,msg:'参数未传'});
     }
-
+    if(!req.session.user){
+        return res.send({code:400,msg:'未登录'});
+    }
     var name = req.body.name ;
     var version = req.body.version;
     var is_force = req.body.is_force;
@@ -75,13 +82,29 @@ router.post('/update', function(req, res, next) {
     var file_name = req.body.file_name ;
     var file_size = req.body.file_size ;
     var file_md5 = req.body.file_md5 ;
+    var remark = req.body.remark ;
 
-    project_model.update(id,name,version,download_path,is_force,option_people,file_md5,file_size,file_name,function (err,data) {
+    project_model.update(id,name,version,download_path,is_force,option_people,file_md5,file_size,file_name,remark,function (err,data) {
         if(err){
             console.error(err);
             return res.send({code:400,msg:err.toLocaleString()});
         }
         return res.send({code:200,msg:'删除成功'});
+    });
+});
+
+router.post('/update', function(req, res, next) {
+    var name = req.body.name ;
+    var version = req.body.version ;
+    if(!name || !version){
+        return res.send({code:400,msg:'参数未传'});
+    }
+    project_model.check(name,version,function (err,data) {
+        if(err){
+            console.error(err);
+            return res.send({code:400,msg:err.toLocaleString()});
+        }
+        return res.send({code:200,msg:'获取成功',data:data});
     });
 });
 

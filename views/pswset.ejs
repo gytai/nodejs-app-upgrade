@@ -14,13 +14,77 @@
     <!--[if IE]>
     <script src="js/html5.js"></script>
     <![endif]-->
+    <style>
+        .layui-form-item .layui-form-label{
+            width: 100px;
+        }
+        .content{
+            text-align: center;
+            margin-top: 40px;
+        }
+        .layui-form{
+            width: 500px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
 <div class="container" >
     <div class="content">
-        欢迎使用该系统，请帮忙给个star，这将是我继续的动力。谢谢...
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">原密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" id="password" required lay-verify="required" placeholder="请输入原密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-block">
+                    <input type="password"  name="password_new" id="password_new"  required lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认信密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password_comfirm" id="password_comfirm" required lay-verify="required" placeholder="请输入确认信密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formBtn">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div><!-- /container -->
+<script type="text/javascript" src="layui/layui.js"></script>
+<script>
+    //Demo
+    layui.use(['form', 'jquery','layer'], function(){
+        var form = layui.form
+            ,$ = layui.jquery
+            ,layer = layui.layer;
 
+        //监听提交
+        form.on('submit(formBtn)', function(data){
+            if(data.field.password_new != data.field.password_comfirm){
+                return layer.msg('两次密码不一致',{icon:6});
+            }
+            if(data.field.password_new == data.field.password){
+                return layer.msg('新旧密码不能相同',{icon:6});
+            }
+            $.post('/users/pswset',data.field,function (res) {
+                if(res.code == 200){
+                    layer.msg('修改成功');
+                } else{
+                    layer.msg(res.msg,{icon:6});
+                }
+            });
+            return false;
+        });
+    });
+</script>
 </body>
 </html>

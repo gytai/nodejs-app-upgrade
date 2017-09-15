@@ -7,15 +7,20 @@
     <link rel="stylesheet" href="layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="css/global.css" media="all">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <style>
+        td,th
+        {
+            white-space: nowrap;
+        }
+    </style>
 </head>
 
 <body>
 <div class="admin-main">
-
     <blockquote class="layui-elem-quote">
-        <a href="javascript:;" class="layui-btn layui-btn-small" id="add">
+        <button  class="layui-btn layui-btn-small" id="addBtn" lay-filter="addBtn">
             <i class="layui-icon">&#xe608;</i> 添加项目
-        </a>
+        </button>
     </blockquote>
     <fieldset class="layui-elem-field">
         <legend>项目列表</legend>
@@ -23,14 +28,15 @@
             <table class="layui-table admin-table">
                 <thead>
                 <tr>
-                    <th style="width: 30px;">序号</th>
+                    <th style="min-width: 30px;">序号</th>
                     <th>项目名称</th>
                     <th>版本号</th>
                     <th>文件下载路径</th>
                     <th>文件原名称</th>
-                    <th>文件大小</th>
+                    <th>文件大小（Byte）</th>
                     <th>文件MD5值</th>
                     <th>是否强制更新</th>
+                    <th>更新说明</th>
                     <th>更新时间</th>
                     <th>操作</th>
                 </tr>
@@ -46,12 +52,12 @@
     </div>
 </div>
 
-<div id="tpl_add">
+<div id="tpl_add" style="display: none;">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>项目添加</legend>
     </fieldset>
 
-    <form class="layui-form" action="/project/add" method="post">
+    <form class="layui-form" action="#">
         <div class="layui-form-item">
             <label class="layui-form-label">项目名称</label>
             <div class="layui-input-block" style="width: 480px;">
@@ -87,39 +93,54 @@
                 <input type="checkbox" name="is_force" lay-filter="is_force" lay-skin="switch" lay-text="是|否">
             </div>
         </div>
-
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">更新说明</label>
+            <div class="layui-input-block">
+                <textarea name="remark" placeholder="请输入更新说明" lay-verify="required" class="layui-textarea"></textarea>
+            </div>
+        </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit="" lay-filter="btnSubmit">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <button class="layui-btn layui-btn-primary" lay-filter="btnBack">返回</button>
             </div>
         </div>
     </form>
 
 </div>
 <!--模板-->
-<script type="text/html" id="tpl">
+<script type="text/html" id="tpl_query">
     {{# layui.each(d.list, function(index, item){ }}
     <tr>
-        <td><input type="checkbox" lay-skin="primary"></td>
+        <td>{{ index+1 }}</td>
         <td>{{ item.name }}</td>
-        <td>{{ item.age }}</td>
-        <td>{{ item.createtime }}</td>
+        <td>{{ item.version }}</td>
+        <td>{{ item.download_path }}</td>
+        <td>{{ item.file_name }}</td>
+        <td>{{ item.file_size }}</td>
+        <td>{{ item.file_md5 }}</td>
+        <td>{{ item.is_force }}</td>
+        <td>{{ item.remark }}</td>
+        <td>{{ item.time }}</td>
         <td>
-            <a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>
-            <a href="javascript:;" data-name="{{ item.name }}" data-opt="edit" class="layui-btn layui-btn-mini">编辑</a>
-            <a href="javascript:;" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+            <a href="javascript:;" data-id={{ item._id }} data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini btnDel">删除</a>
         </td>
     </tr>
     {{# }); }}
+    {{#  if(d.list.length === 0){ }}
+    无数据
+    {{#  } }}
 </script>
 
 <script type="text/javascript" src="layui/layui.js"></script>
+<script type="text/javascript" src="js/dateFormater.js"></script>
 <script>
-    layui.use(['form', 'jquery','upload'], function(){
+    layui.use(['form', 'jquery','upload','laytpl'], function(){
         var form = layui.form
             ,layer = layui.layer
             ,$ = layui.jquery
+            ,laytpl = layui.laytpl
             ,upload = layui.upload;
 
         //监听指定开关
@@ -135,10 +156,19 @@
             $.post('/project/add',data.field,function (res) {
                 if(res.code == 200){
                     layer.msg('添加成功');
+                    $('.admin-main').show();
+                    $('#tpl_add').hide();
+                    get_project(1,100);
                 }else{
-                    layer.msg('添加失败');
+                    layer.msg(res.msg);
                 }
             });
+            return false;
+        });
+
+        form.on('submit(btnBack)', function(data){
+            $('.admin-main').show();
+            $('#tpl_add').hide();
             return false;
         });
 
@@ -158,6 +188,51 @@
                 layer.msg('上传失败',{icon:6});
             }
         });
+
+        $(document).on('click','#addBtn',function () {
+            $('.admin-main').hide();
+            $('#tpl_add').show();
+        });
+
+        $(document).on('click','.btnDel',function () {
+            var id = $(this).attr('data-id');
+            $.post('/project/del',{id:id},function (res) {
+               if(res.code == 200){
+                   layer.msg('删除成功');
+                   get_project(1,100);
+               } else{
+                   layer.msg('删除失败',{icon:6});
+               }
+            });
+        });
+
+        //init
+        function get_project(page,size) {
+            $.get('/project/query',{page:page,size:size},function (res) {
+                var dd = [];
+                res.data.forEach(function (info) {
+                    if(info.is_force){
+                        info.is_force = '是'
+                    }else{
+                        info.is_force = '否'
+                    }
+                    info.time = DateFormater(new Date(info.time));
+                    dd.push(info);
+                });
+
+                var data = {
+                    "title":"项目数据"
+                    ,"list":res.data
+                }
+                var getTpl = tpl_query.innerHTML
+                    ,view = document.getElementById('content');
+                laytpl(getTpl).render(data, function(html){
+                    view.innerHTML = html;
+                });
+            });
+        }
+
+        get_project(1,100);
 
     });
 
