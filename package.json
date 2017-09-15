@@ -15,6 +15,7 @@
     "serve-favicon": "~2.4.2",
     "express-session": "^1.15.5",
     "mongoose":"^4.11.11",
-    "crypto":"^1.0.1"
+    "crypto":"^1.0.1",
+    "formidable":"^1.1.1"
   }
 }
