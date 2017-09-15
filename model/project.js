@@ -71,7 +71,17 @@ function check(name,ver,callback) {
         if(!res){
             return callback('暂无更新',null);
         }
-        return callback(null,res);
+        var ret = {
+            file_md5:res.file_md5,
+            file_name:res.file_name,
+            file_size:res.file_size,
+            name:res.name,
+            version:res.version,
+            download_path:res.download_path,
+            is_force:res.is_force
+
+        }
+        return callback(null,ret);
     });
 
 }

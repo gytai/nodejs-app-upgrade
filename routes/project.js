@@ -93,7 +93,7 @@ router.post('/update', function(req, res, next) {
     });
 });
 
-router.post('/update', function(req, res, next) {
+router.post('/check', function(req, res, next) {
     var name = req.body.name ;
     var version = req.body.version ;
     if(!name || !version){
@@ -104,7 +104,7 @@ router.post('/update', function(req, res, next) {
             console.error(err);
             return res.send({code:400,msg:err.toLocaleString()});
         }
-        return res.send({code:200,msg:'获取成功',data:data});
+        return res.send({code:200,msg:'有新的升级',data:data});
     });
 });
 
