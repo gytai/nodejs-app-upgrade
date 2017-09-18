@@ -9,6 +9,24 @@
 > * LayUI的admin模板使用
 > * MongoDB以及Mongoose的使用
 
+### 安装
+1,git clone https://github.com/gytai/nodejs-app-upgrade.git
+
+2,npm install 
+
+3,pm2 start bin/www -name upgrade
+
+### 线上Demo
+http://112.74.81.224:3008/
+测试账户：admin 123456
+
+### 已完成和未完成 
+- [x] 登录、登出
+- [x] 项目添加、更新、删除
+- [x] 密码修改
+- [ ] 用户管理
+- [ ] 权限控制
+
 实例图片：
 ![登录](https://github.com/gytai/nodejs-app-upgrade/blob/master/login.png)
 
@@ -17,19 +35,5 @@
 ![项目添加](https://github.com/gytai/nodejs-app-upgrade/blob/master/project_add.png)
 
 ![修改密码](https://github.com/gytai/nodejs-app-upgrade/blob/master/password_reset.png)
-
-### [安装]
-1,git clone https://github.com/gytai/nodejs-app-upgrade.git
-
-2,npm install 
-
-3,pm2 start bin/www -name upgrade
-
-### 1. 已完成和未完成 
-- [x] 登录、登出
-- [x] 项目添加、更新、删除
-- [x] 密码修改
-- [ ] 用户管理
-- [ ] 权限控制
 
 如果您喜欢，请给个Star 谢谢...
