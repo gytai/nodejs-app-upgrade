@@ -14,6 +14,10 @@ var navs = [
         "icon": "fa-cubes",
         "spread": true,
         "children": [{
+            "title": "用户管理",
+            "icon": "&#xe613;",
+            "href": "/users"
+        },{
             "title": "修改密码",
             "icon": "&#xe609;",
             "href": "/pswset"

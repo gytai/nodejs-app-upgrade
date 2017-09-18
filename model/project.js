@@ -25,6 +25,12 @@ function add(name,version,download_path,is_force,option_people,file_md5,file_siz
         if(data.length > 0){
             return callback('项目已存在',null);
         }
+        if(!is_force){
+            is_force = false
+        }else{
+            is_force = true;
+        }
+
         var project = new ProjectModel({ name: name,version:version,download_path:download_path,is_force:is_force,option_people:option_people,file_md5:file_md5,file_size:file_size,file_name:file_name,remark:remark});
         project.save(function (err) {
             if (err){
@@ -45,11 +51,21 @@ function update(id,name,version,download_path,is_force,option_people,file_md5,fi
         if(err){
             return callback(err,null);
         }
+        if(!info){
+            return callback('项目不存在',null);
+        }
+
+        if(!is_force){
+            is_force = false
+        }else{
+            is_force = true;
+        }
+
         var param = {
             name: name || info.name,
             version:version || info.version,
             download_path:download_path || info.download_path,
-            is_force:is_force || info.is_force,
+            is_force:is_force,
             option_people:option_people || info.option_people,
             file_md5:file_md5 || info.file_md5,
             file_size:file_size || info.file_size,
