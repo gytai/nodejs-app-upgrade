@@ -25,7 +25,7 @@ http://112.74.81.224:3008/
 Post:http://localhost:3000/project/check
 
 返回：
-、、、javascript
+```javascript
 {
     "code": 200,
     "msg": "有新的升级",
@@ -39,7 +39,7 @@ Post:http://localhost:3000/project/check
         "is_force": false
     }
 }
-、、、
+```
 
 ### 已完成和未完成 
 - [x] 登录、登出
