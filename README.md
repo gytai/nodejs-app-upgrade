@@ -16,11 +16,13 @@
 
 ![项目添加](https://github.com/gytai/nodejs-app-upgrade/blob/master/project_add.png)
 
-![修改密码](https://github.com/gytai/nodejs-app-upgrade/blob/master/assword_reset.png)
+![修改密码](https://github.com/gytai/nodejs-app-upgrade/blob/master/password_reset.png)
 
 ### [安装]
 1,git clone https://github.com/gytai/nodejs-app-upgrade.git
+
 2,npm install 
+
 3,pm2 start bin/www -name upgrade
 
 ### 1. 已完成和未完成 
