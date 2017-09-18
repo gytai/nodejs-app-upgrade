@@ -18,13 +18,22 @@ var ProjectSchema = new Schema({
 var ProjectModel = mongoose.model("project", ProjectSchema);
 
 function add(name,version,download_path,is_force,option_people,file_md5,file_size,file_name,remark,callback) {
-    var project = new ProjectModel({ name: name,version:version,download_path:download_path,is_force:is_force,option_people:option_people,file_md5:file_md5,file_size:file_size,file_name:file_name,remark:remark});
-    project.save(function (err) {
-        if (err){
+    ProjectModel.find({name:name,is_delete:false},function (err,data) {
+        if(err){
             return callback(err,null);
         }
-        return callback(null,null);
-    })
+        if(data.length > 0){
+            return callback('项目已存在',null);
+        }
+        var project = new ProjectModel({ name: name,version:version,download_path:download_path,is_force:is_force,option_people:option_people,file_md5:file_md5,file_size:file_size,file_name:file_name,remark:remark});
+        project.save(function (err) {
+            if (err){
+                return callback(err,null);
+            }
+            return callback(null,null);
+        });
+    });
+
 }
 
 function del(id,callback) {
