@@ -21,7 +21,7 @@ function login(username,password,callback) {
         if (err) {
             _err = err;
         }
-        if(res.length == 0){
+        if(!res){
             _err = '用户名密码不正确';
         }
         return callback(_err,res);
