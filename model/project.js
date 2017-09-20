@@ -89,7 +89,7 @@ function query(page,size,callback) {
 }
 
 function check(name,ver,callback) {
-    ProjectModel.findOne({name:name,version:{$gt: ver}},function (err, res) {
+    ProjectModel.findOne({name:name,version:{$gt: ver},is_delete:false},function (err, res) {
         if (err) {
             return callback(err,null);
         }
