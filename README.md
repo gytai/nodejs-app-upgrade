@@ -18,7 +18,28 @@
 
 ### 线上Demo
 http://112.74.81.224:3008/
+
 测试账户：admin 123456
+
+### App检查更新
+Post:http://localhost:3000/project/check
+
+返回：
+```javascript
+{
+    "code": 200,
+    "msg": "有新的升级",
+    "data": {
+        "file_md5": "e396add0bc852fc82f30652eeb1520bf",
+        "file_name": "robo3t-1.1.1-darwin-x86_64-c93c6b0.dmg",
+        "file_size": 22617886,
+        "name": "医疗",
+        "version": "v1.0.2",
+        "download_path": "/uploads/upload_e4796bd63685ff8144fc563af44052f4.dmg",
+        "is_force": false
+    }
+}
+```
 
 ### 已完成和未完成 
 - [x] 登录、登出
