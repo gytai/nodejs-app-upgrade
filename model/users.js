@@ -24,7 +24,6 @@ UsersModel.findOne({'username':'meyer'}, function(err, res){
     }
 })
 
-
 function login(username,password,callback) {
     var md5 = crypto.createHash('md5');
     password = md5.update(password).digest('hex');
