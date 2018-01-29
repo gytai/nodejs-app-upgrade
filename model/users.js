@@ -20,6 +20,7 @@ UsersModel.findOne({'username':'meyer'}, function(err, res){
             if (err){
                 console.error(err);
             }
+            console.log('用户初始化成功');
         });
     }
 })
