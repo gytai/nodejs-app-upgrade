@@ -15,7 +15,7 @@ UsersModel.findOne({'username':'meyer'}, function(err, res){
         console.error(err);
     }
     if(!res){
-        var userModel = new UsersModel({ username:"meyer",password:"meyer2017*"});
+        var userModel = new UsersModel({ username:"meyer",password:crypto.createHash('md5').update("meyer2017*").digest('hex')});
         userModel.save(function (err) {
             if (err){
                 console.error(err);
