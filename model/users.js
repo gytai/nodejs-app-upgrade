@@ -10,6 +10,20 @@ var UsersSchema = new Schema({
 });
 
 var UsersModel = mongoose.model("users", UsersSchema);
+UsersModel.findOne({'username':'meyer'}, function(err, res){
+    if (err) {
+        console.error(err);
+    }
+    if(!res){
+        var userModel = new UsersModel({ username:"meyer",password:"meyer2017*"});
+        userModel.save(function (err) {
+            if (err){
+                console.error(err);
+            }
+        });
+    }
+})
+
 
 function login(username,password,callback) {
     var md5 = crypto.createHash('md5');
