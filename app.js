@@ -27,7 +27,7 @@ app.use(session({
     secret: '12345',
     name: 'app-upgrade',
     cookie: {maxAge: 1000*60*60 },
-    resave: false,
+    resave: true,
     saveUninitialized: true
 }));
 
