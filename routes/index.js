@@ -42,6 +42,7 @@ router.post('/upload', function(req, res, next) {
 
 /* 页面路由 */
 router.get('/', function(req, res, next) {
+  console.log('当前Session',req.session.user)
   if(req.session.user){
       res.render('index');
   }else{
