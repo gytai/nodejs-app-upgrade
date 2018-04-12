@@ -103,8 +103,8 @@ function check(name,ver,callback) {
             name:res.name,
             version:res.version,
             download_path:res.download_path,
-            is_force:res.is_force
-
+            is_force:res.is_force,
+            remark: res.remark
         }
         return callback(null,ret);
     });
